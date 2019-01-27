@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace ImageProcessing
 {
@@ -16,12 +15,14 @@ namespace ImageProcessing
                 ConsoleColor color = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
 
-                Console.WriteLine("1. Переименование изображений в соответствии с датой сьемки.\n" +
+                Console.WriteLine("Выберите действие:\n" +
+                                  "1. Переименование изображений в соответствии с датой сьемки.\n" +
                                   "2. Добавления на изображение отметку, когда фото было сделано.\n" +
                                   "3. Сортировка изображений по папкам по годам.\n" +
                                   "4. Сортировка изображений по папкам по месту сьемки.\n5. Выйти из программы.");
-
                 Console.ForegroundColor = color;
+
+                ImageProcessor processor = null;
                 try
                 {
                     Console.WriteLine("Введите номер пункта:");
@@ -30,26 +31,22 @@ namespace ImageProcessing
                     switch (command)
                     {
                         case 1:
-                            var a = new RenameImageShootingDate(PathDirectory, @"_RenameImageShootingDate\");
-                            a.GetFiles();
+                            processor = new RenameImageShootingDate(PathDirectory, @"_RenameImageShootingDate\");
                             break;
                         case 2:
-                            var b = new AddMark(PathDirectory, @"_AddMark\");
-                            b.GetFiles();
+                            processor = new AddMark(PathDirectory, @"_AddMark\");
                             break;
                         case 3:
-                            var c = new SortByYear(PathDirectory, @"_SortByYear\");
-                            c.GetFiles();
+                            processor = new SortByYear(PathDirectory, @"_SortByYear\");
                             break;
                         case 4:
-                            var d = new SortByLocation(PathDirectory, @"_SortByLocation\");
-                            d.GetFiles();
-
+                            processor = new SortByLocation(PathDirectory, @"_SortByLocation\");
                             break;
                         case 5:
                             alive = false;
                             continue;
                     }
+                    processor?.ProcessFiles();
                 }
                 catch (Exception ex)
                 {
